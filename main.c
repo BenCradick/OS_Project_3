@@ -3,6 +3,8 @@
 #include <sys/shm.h>
 #include <string.h>
 #include "shared_memory.h"
+
+
 int getLineCount(FILE*);
 int main(int argc, char** argv) {
 
@@ -40,7 +42,7 @@ int main(int argc, char** argv) {
     }
     sem_close(sharedMemory.noPalinSemaphore);
     sem_close(sharedMemory.palinSemaphore);
-    //shmdt(sharedMemory.words);
+    shmdt(words);
     shmctl(sharedMemory.shmid, IPC_RMID, NULL);
 
     return 0;

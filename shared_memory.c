@@ -17,7 +17,7 @@ SharedMemory init(SharedMemory *this, int size)
 
 
 
-    this->shmid = shmget(this->key, size * LINE_MAX, 0666 | IPC_CREAT);
+    this->shmid = shmget(this->key, (size_t) size * LINE_MAX, 0666 | IPC_CREAT);
     if(errno != 0){
         perror("Failed to obtain shared memory id: ");
     }
