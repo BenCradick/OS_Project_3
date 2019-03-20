@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <semaphore.h>
 #include "shared_memory.h"
 
 
@@ -39,7 +40,8 @@ int main(int argc, char** argv) {
     inputStream =  fopen(inputFile, "r");
     rows = getLineCount(inputStream);
 
-    SharedMemory sharedMemory = init(&sharedMemory, rows);
+    SharedMemory sharedMemory;
+    sharedMemory = init(&sharedMemory, rows);
 
     char (*words)[rows][LINE_MAX] = NULL;
 

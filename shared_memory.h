@@ -30,5 +30,5 @@ typedef struct SharedMemory {
 
 }SharedMemory;
 
-SharedMemory init(SharedMemory *this, int size);
+SharedMemory init(SharedMemory* , int);
 #endif //CRADICK_3_SHARED_MEMORY_H
