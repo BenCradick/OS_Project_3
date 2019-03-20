@@ -4,14 +4,21 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <sys/types.h>
+#include <sys/time.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <signal.h>
 #include "shared_memory.h"
 
 
 int getLineCount(FILE*);
 int getLengthOfDigit(int);
+void programAlarm();
+void setAlarm();
+void sigInt();
 int main(int argc, char** argv) {
+
+    setAlarm();
 
     int childCount = 0;
     const int MAX_CHILDREN = 20;
@@ -22,6 +29,10 @@ int main(int argc, char** argv) {
     int status;
     pid_t pid;
     int count = 0;
+
+    if(signal(SIGINT, sigInt) == SIG_ERR){
+        perror("Failed to catch SIGINT\n");
+    }
 
     FILE* inputStream;
 
@@ -35,6 +46,8 @@ int main(int argc, char** argv) {
     char line[LINE_MAX];
 
     words = shmat(sharedMemory.shmid, (void*)0, 0);
+
+
 
     while(fgets(line, LINE_MAX, inputStream) != NULL)
     {
@@ -102,4 +115,39 @@ int getLengthOfDigit(int digit){
     }while(digit != 0);
     return length;
 }
+void setAlarm(){
+    struct itimerval it_val;
+    it_val.it_value.tv_sec = 100;
+    it_val.it_value.tv_usec = 0;
 
+    it_val.it_interval = it_val.it_value;
+
+    if(signal(SIGALRM, (void(*)(int)) programAlarm) == SIG_ERR){
+        perror("Failed to catch SIGALRM");
+        exit(1);
+    }
+
+    if (setitimer(ITIMER_REAL, &it_val, NULL) == -1) {
+        perror("Failed to call setitimer: ");
+        exit(1);
+    }
+}
+void programAlarm(){
+    fprintf(stdout, "Program time out\n");
+    SharedMemory sharedMemory = init(&sharedMemory, 0);
+
+    sem_close(sharedMemory.noPalinSemaphore);
+    sem_close(sharedMemory.palinSemaphore);
+    shmctl(sharedMemory.shmid, IPC_RMID, NULL);
+    exit(EXIT_FAILURE);
+}
+void sigInt(){
+    fprintf(stdout, "ctrl-C signal received terminating program.\n");
+    kill(0, SIGINT);
+    SharedMemory sharedMemory = init(&sharedMemory, 0);
+
+    sem_close(sharedMemory.noPalinSemaphore);
+    sem_close(sharedMemory.palinSemaphore);
+    shmctl(sharedMemory.shmid, IPC_RMID, NULL);
+    exit(EXIT_FAILURE);
+}
