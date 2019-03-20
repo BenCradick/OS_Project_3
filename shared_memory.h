@@ -5,7 +5,7 @@
 #ifndef CRADICK_3_SHARED_MEMORY_H
 #define CRADICK_3_SHARED_MEMORY_H
 
-#include <_stdio.h>
+#include <stdio.h>
 #include <semaphore.h>
 
 
