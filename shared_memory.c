@@ -10,7 +10,8 @@
 #include <errno.h>
 #include <limits.h>
 #include <stdlib.h>
-
+#include <semaphore.h>
+#include <fcntl.h>
 SharedMemory init(SharedMemory *this, int size)
 {
     this->key = ftok("shared_memory.c", 1);
