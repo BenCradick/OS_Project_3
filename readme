@@ -1,0 +1,8 @@
+Used POSIX semaphores because thread pooling on sem_wait() is much more user firendly, cleared with bhatia in class.
+Did not include any program arguments because the instructions didn't list it default value for input is file named test.
+Otherwise include file as argument.
+
+Hoare really doesn't like to open up files in a timely manner, so there is a good chance the program will crash because
+a new output file has yet to be declared.
+
+detailed commit history is on my github: github.com/BenCradick under OS_Project_3

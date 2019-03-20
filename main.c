@@ -24,7 +24,10 @@ int main(int argc, char** argv) {
     int childCount = 0;
     const int MAX_CHILDREN = 20;
 
-    char* inputFile = argv[1];
+    char* inputFile = "test";
+    if(argv[1] != NULL) {
+        inputFile = argv[1];
+    }
     int rows;
 
     int status;

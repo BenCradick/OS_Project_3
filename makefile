@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -std=gnu99
+CFLAGS = -std=gnu99 -pthread
 OBJ = main palin
 DEP = shared_memory.c
 ALL: $(OBJ)
